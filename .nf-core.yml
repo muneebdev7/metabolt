@@ -1,0 +1,39 @@
+bump_version: null
+lint:
+  files_exist:
+  - CODE_OF_CONDUCT.md
+  - assets/nf-core-metabolt_logo_light.png
+  - docs/images/nf-core-metabolt_logo_light.png
+  - docs/images/nf-core-metabolt_logo_dark.png
+  - .github/ISSUE_TEMPLATE/config.yml
+  - .github/workflows/awstest.yml
+  - .github/workflows/awsfulltest.yml
+  files_unchanged:
+  - CODE_OF_CONDUCT.md
+  - assets/nf-core-metabolt_logo_light.png
+  - docs/images/nf-core-metabolt_logo_light.png
+  - docs/images/nf-core-metabolt_logo_dark.png
+  - .github/ISSUE_TEMPLATE/bug_report.yml
+  multiqc_config:
+  - report_comment
+  nextflow_config:
+  - manifest.name
+  - manifest.homePage
+  - validation.help.beforeText
+  - validation.help.afterText
+  - validation.summary.beforeText
+  - validation.summary.afterText
+nf_core_version: 3.0.2
+org_path: null
+repository_type: pipeline
+template:
+  author: Muneeb
+  description: Lightning fast & automated metagenomic pipeline powered by Nextflow
+  force: true
+  is_nfcore: false
+  name: metabolt
+  org: MDL
+  outdir: metabolt
+  skip_features: null
+  version: '1.0'
+update: null
