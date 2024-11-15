@@ -34,6 +34,11 @@
                         "branch": "master",
                         "git_sha": "cf17ca47590cc578dfb47db1c2a44ef86f89976d",
                         "installed_by": ["modules"]
+                    },
+                    "samtools/sort": {
+                        "branch": "master",
+                        "git_sha": "b7800db9b069ed505db3f9d91b8c72faea9be17b",
+                        "installed_by": ["modules"]
                     }
                 }
             },
