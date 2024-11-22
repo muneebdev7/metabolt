@@ -16,6 +16,11 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_meta
 include { FASTQC                 } from '../modules/nf-core/fastqc/main'
 include { FASTP                  } from '../modules/nf-core/fastp/main'
 include { MEGAHIT                } from '../modules/nf-core/megahit/main'
+include { BWA_INDEX              } from '../modules/nf-core/bwa/index/main'
+include { BWA_MEM                } from '../modules/nf-core/bwa/mem/main'
+include { SAMTOOLS_SORT          } from '../modules/nf-core/samtools/sort/main'
+include { SAMTOOLS_INDEX         } from '../modules/nf-core/samtools/index/main'
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -61,13 +66,10 @@ workflow METABOLT {
 
     /*
     ================================================================================
-                                    Assembly and Mapping
+                                    Assembly
     ================================================================================
     */
 
-    //
-    // MODULE: Run MEGAHIT for assembly
-    //
     // Prepare FASTP output for MEGAHIT input
     ch_megahit_input = FASTP.out.reads.map { meta, reads ->
         def reads1 = meta.single_end ? reads : reads[0]
@@ -75,6 +77,9 @@ workflow METABOLT {
         [meta, reads1, reads2]
     }
 
+    //
+    // MODULE: Run MEGAHIT for assembly
+    //
     MEGAHIT (
         ch_megahit_input
     )
@@ -85,6 +90,59 @@ workflow METABOLT {
         [meta + [assembler: 'megahit'], contigs]
     }
 
+    /*
+    ================================================================================
+                                Mapping and Alignment
+    ================================================================================
+    */
+
+    //
+    // MODULE: Run BWA_INDEX on assembled contigs for indexing
+    //
+    BWA_INDEX(ch_assemblies)
+
+    // Prepare input for BWA_MEM
+    ch_bwa_mem_input = FASTP.out.reads.combine(BWA_INDEX.out.index, by: 0)
+        .combine(ch_assemblies)
+        .map { meta, reads, index, assembly_meta, assembly ->
+            [meta, reads, index, assembly]
+        }
+    // Collect version information
+    ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
+
+    //
+    // MODULE: Run BWA_MEM for alignment of trimmed reads to indexed contigs
+    //
+    BWA_MEM(
+        ch_bwa_mem_input,
+        BWA_INDEX.out.index,
+        ch_assemblies,
+        true
+    )
+    // Collect version information
+    ch_versions = ch_versions.mix(BWA_MEM.out.versions)
+
+    // Prepare input for SAMTOOLS_SORT
+    ch_bam_for_sort = BWA_MEM.out.bam
+    ch_fasta_for_sort = ch_assemblies.map { meta, assembly -> [[id: "assembly"], assembly] }
+
+    // SAMTOOLS_SORT
+    SAMTOOLS_SORT(
+        ch_bam_for_sort,
+        ch_fasta_for_sort
+    )
+
+    // Collect version information
+    ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions)
+
+    // SAMTOOLS_INDEX
+    SAMTOOLS_INDEX(SAMTOOLS_SORT.out.bam)
+    // Collect version information
+    ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions)
+
+    // Output channels for downstream use
+    ch_sorted_bam = SAMTOOLS_SORT.out.bam
+    ch_bam_index = SAMTOOLS_INDEX.out.bai.mix(SAMTOOLS_INDEX.out.csi)
 
     //
     // Collate and save software versions
