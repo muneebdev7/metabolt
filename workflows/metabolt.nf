@@ -100,13 +100,6 @@ workflow METABOLT {
     // MODULE: Run BWA_INDEX on assembled contigs for indexing
     //
     BWA_INDEX(ch_assemblies)
-
-    // Prepare input for BWA_MEM
-    ch_bwa_mem_input = FASTP.out.reads.combine(BWA_INDEX.out.index, by: 0)
-        .combine(ch_assemblies)
-        .map { meta, reads, index, assembly_meta, assembly ->
-            [meta, reads, index, assembly]
-        }
     // Collect version information
     ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
 
@@ -114,7 +107,7 @@ workflow METABOLT {
     // MODULE: Run BWA_MEM for alignment of trimmed reads to indexed contigs
     //
     BWA_MEM(
-        ch_bwa_mem_input,
+        FASTP.out.reads,
         BWA_INDEX.out.index,
         ch_assemblies,
         true
@@ -123,7 +116,10 @@ workflow METABOLT {
     ch_versions = ch_versions.mix(BWA_MEM.out.versions)
 
     // Prepare input for SAMTOOLS_SORT
-    ch_bam_for_sort = BWA_MEM.out.bam
+    ch_bam_for_sort = BWA_MEM.out.bam.map { meta, bam ->
+        // Ensure meta.id is unique: Add a suffix
+        [ meta + [id: "${meta.id}_aligned"], bam ]
+    }
     ch_fasta_for_sort = ch_assemblies.map { meta, assembly -> [[id: "assembly"], assembly] }
 
     // SAMTOOLS_SORT
@@ -210,6 +206,8 @@ workflow METABOLT {
 
     emit:
     assemblies     = ch_assemblies               // channel:
+    aligned_sort   = ch_sorted_bam
+    aligned_index  = ch_bam_index
     multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
 
