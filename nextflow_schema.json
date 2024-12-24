@@ -265,7 +265,7 @@
                 },
                 "megahit_kmer_list": {
                     "type": "string",
-                    "default": "31,59,87,115"
+                    "default": "31,59,87,115,143"
                 }
             }
         }
