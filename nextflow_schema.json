@@ -224,7 +224,7 @@
         "fastp_options": {
             "title": "fastp options",
             "type": "object",
-            "description": "",
+            "description": "Extended arguments for preprocessing",
             "default": "",
             "properties": {
                 "adapter_fasta": {
@@ -268,7 +268,7 @@
         "megahit_options": {
             "title": "MEGAHIT options",
             "type": "object",
-            "description": "MEGAHIT options for optimized assembly process.",
+            "description": "MEGAHIT options for optimized and efficient assembly process.",
             "default": "",
             "properties": {
                 "megahit_min_contig_len": {
@@ -285,6 +285,20 @@
                 }
             },
             "fa_icon": "fas fa-align-justify"
+        },
+        "metabat2_options": {
+            "title": "METABAT2 options",
+            "type": "object",
+            "default": "",
+            "properties": {
+                "metabat2_min_contig_len": {
+                    "type": "integer",
+                    "default": 1500,
+                    "description": "Minimum length of contigs to include in binning process. Contigs shorter than the specified length will be excluded from the analysis."
+                }
+            },
+            "fa_icon": "fas fa-trash",
+            "description": "Extended arguments for high-quality bins"
         }
     },
     "allOf": [
@@ -305,6 +319,9 @@
         },
         {
             "$ref": "#/$defs/megahit_options"
+        },
+        {
+            "$ref": "#/$defs/metabat2_options"
         }
     ]
 }

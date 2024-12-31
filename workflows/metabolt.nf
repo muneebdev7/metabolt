@@ -4,21 +4,23 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_metabolt_pipeline'
+include { MULTIQC                              } from '../modules/nf-core/multiqc/main'
+include { paramsSummaryMap                     } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc                 } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText               } from '../subworkflows/local/utils_nfcore_metabolt_pipeline'
 
 //
 // MODULES: Installed directly from nf-core/modules
 //
-include { FASTQC                 } from '../modules/nf-core/fastqc/main'
-include { FASTP                  } from '../modules/nf-core/fastp/main'
-include { MEGAHIT                } from '../modules/nf-core/megahit/main'
-include { BWA_INDEX              } from '../modules/nf-core/bwa/index/main'
-include { BWA_MEM                } from '../modules/nf-core/bwa/mem/main'
-include { SAMTOOLS_INDEX         } from '../modules/nf-core/samtools/index/main'
+include { FASTQC                               } from '../modules/nf-core/fastqc/main'
+include { FASTP                                } from '../modules/nf-core/fastp/main'
+include { MEGAHIT                              } from '../modules/nf-core/megahit/main'
+include { BWA_INDEX                            } from '../modules/nf-core/bwa/index/main'
+include { BWA_MEM                              } from '../modules/nf-core/bwa/mem/main'
+include { SAMTOOLS_INDEX                       } from '../modules/nf-core/samtools/index/main'
+include { METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS } from '../modules/nf-core/metabat2/jgisummarizebamcontigdepths/main'
+include { METABAT2_METABAT2                    } from '../modules/nf-core/metabat2/metabat2/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,6 +124,53 @@ workflow METABOLT {
     // Output channels for downstream use
     ch_sorted_bam = BWA_MEM.out.bam
     ch_bam_index = SAMTOOLS_INDEX.out.bai.mix(SAMTOOLS_INDEX.out.csi)
+
+    /*
+    ================================================================================
+                            Contigs Depth Calculation
+    ================================================================================
+    */
+
+    // Generate coverage depths for each contig
+    ch_summarizedepth_input = ch_assemblies
+        .join(ch_sorted_bam)
+        .join(ch_bam_index)
+        .map { meta, contigs, bam, bai ->
+            [ meta, bam, bai ]
+        }
+
+    //
+    // MODULE: Run METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS
+    //
+    METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS(
+        ch_summarizedepth_input
+    )
+    // Collect version information
+    ch_versions = ch_versions.mix(METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS.out.versions)
+
+    ch_metabat_depths = METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS.out.depth
+
+    /*
+    ================================================================================
+                                    Genome Binning
+    ================================================================================
+    */
+
+    // Prepare input for METABAT2
+    ch_metabat_input = ch_assemblies
+        .join(ch_metabat_depths)
+        .map { meta, contigs, depths ->
+            [ meta, contigs, depths ]
+        }
+
+    //
+    // MODULE: Run METABAT2
+    //
+    METABAT2_METABAT2 (
+        ch_metabat_input
+    )
+    // Collect version information
+    ch_versions = ch_versions.mix(METABAT2_METABAT2.out.versions)
 
     //
     // Collate and save software versions
