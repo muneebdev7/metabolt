@@ -43,7 +43,7 @@ template:
   is_nfcore: false
   name: metabolt
   org: MDL
-  outdir: metabolt
+  outdir: .
   skip_features: null
   version: '1.0'
 update: null
