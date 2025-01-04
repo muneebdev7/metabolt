@@ -5,7 +5,12 @@ lint:
   - assets/nf-core-metabolt_logo_light.png
   - docs/images/nf-core-metabolt_logo_light.png
   - docs/images/nf-core-metabolt_logo_dark.png
+  - .github/CONTRIBUTING.md
   - .github/ISSUE_TEMPLATE/config.yml
+  - .github/ISSUE_TEMPLATE/bug_report.yml
+  - .github/ISSUE_TEMPLATE/feature_request.yml
+  - .github/PULL_REQUEST_TEMPLATE.md
+  - .github/workflows/branch.yml
   - .github/workflows/awstest.yml
   - .github/workflows/awsfulltest.yml
   files_unchanged:
@@ -14,6 +19,11 @@ lint:
   - docs/images/nf-core-metabolt_logo_light.png
   - docs/images/nf-core-metabolt_logo_dark.png
   - .github/ISSUE_TEMPLATE/bug_report.yml
+  - .github/ISSUE_TEMPLATE/bug_report.yml
+  - .github/ISSUE_TEMPLATE/feature_request.yml
+  - .github/workflows/branch.yml
+  - .github/CONTRIBUTING.md
+  - .github/PULL_REQUEST_TEMPLATE.md
   multiqc_config:
   - report_comment
   nextflow_config:
@@ -23,11 +33,11 @@ lint:
   - validation.help.afterText
   - validation.summary.beforeText
   - validation.summary.afterText
-nf_core_version: 3.0.2
+nf_core_version: 3.1.1
 org_path: null
 repository_type: pipeline
 template:
-  author: Muneeb
+  author: Muhammad Muneeb Nasir
   description: Lightning fast & automated metagenomic pipeline powered by Nextflow
   force: true
   is_nfcore: false
