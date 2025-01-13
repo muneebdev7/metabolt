@@ -1,4 +1,3 @@
-bump_version: null
 lint:
   files_exist:
   - CODE_OF_CONDUCT.md
@@ -25,25 +24,22 @@ lint:
   - .github/CONTRIBUTING.md
   - .github/PULL_REQUEST_TEMPLATE.md
   multiqc_config:
-  - report_comment
+    - report_comment
   nextflow_config:
-  - manifest.name
-  - manifest.homePage
-  - validation.help.beforeText
-  - validation.help.afterText
-  - validation.summary.beforeText
-  - validation.summary.afterText
+    - manifest.name
+    - manifest.homePage
+    - validation.help.beforeText
+    - validation.help.afterText
+    - validation.summary.beforeText
+    - validation.summary.afterText
 nf_core_version: 3.1.1
-org_path: null
 repository_type: pipeline
 template:
   author: Muhammad Muneeb Nasir
   description: Lightning fast & automated metagenomic pipeline powered by Nextflow
-  force: true
+  force: false
   is_nfcore: false
   name: metabolt
   org: MDL
   outdir: .
-  skip_features: null
-  version: '1.0'
-update: null
+  version: "1.0"
