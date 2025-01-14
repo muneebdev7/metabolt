@@ -44,6 +44,8 @@
 
   > Ma, B., Lu, C., Wang, Y. et al. A genomic catalogue of soil microbiomes boosts mining of biodiversity and genetic resources. Nat Commun 14, 7318 (2023). doi.org/10.1038/s41467-023-43000-z
 
+- [Test-profile data](https://github.com/nf-core/test-datasets/tree/mag/test_data)
+
 ## Software packaging/containerisation tools
 
 - [Anaconda](https://anaconda.com)
