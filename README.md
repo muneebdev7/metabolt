@@ -59,6 +59,7 @@
 ### Minimum Steps to Execute the Pipeline
 
 1. **Samplesheet Preparation:**
+
    - Prepare a samplesheet with your input data. Each row represents a sample, with columns specifying the sample name and the paths to the FASTQ files.
 
    - Example `samplesheet.csv` (for paired-end reads):
@@ -78,6 +79,7 @@
      -profile <docker/singularity/conda/institute> \
      --input samplesheet.csv \
      --outdir <OUTDIR>
+   ```
 
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).

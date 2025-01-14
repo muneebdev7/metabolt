@@ -11,7 +11,8 @@
 ## Pipeline tools
 
 - [BWA](https://doi.org/10.1093/bioinformatics/btp324)
-  >Heng Li, Richard Durbin, Fast and accurate short read alignment with Burrows–Wheeler transform, Bioinformatics, Volume 25, Issue 14, July 2009, Pages 1754–1760, doi: 10.1093/bioinformatics/btp324
+
+  > Heng Li, Richard Durbin, Fast and accurate short read alignment with Burrows–Wheeler transform, Bioinformatics, Volume 25, Issue 14, July 2009, Pages 1754–1760, doi: 10.1093/bioinformatics/btp324
 
 - [FastP](https://doi.org/10.1093/bioinformatics/bty560)
 
