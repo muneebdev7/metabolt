@@ -4,14 +4,19 @@ Changes in component 'nf-core/metabat2/jgisummarizebamcontigdepths'
 Changes in 'metabat2/jgisummarizebamcontigdepths/main.nf':
 --- modules/nf-core/metabat2/jgisummarizebamcontigdepths/main.nf
 +++ modules/nf-core/metabat2/jgisummarizebamcontigdepths/main.nf
-@@ -9,6 +9,7 @@
+@@ -9,10 +9,11 @@
  
      input:
      tuple val(meta), path(bam), path(bai)
-+    path assembly_contigs_fasta
++    tuple val(meta2), path (assembly_contigs_fasta)
  
      output:
      tuple val(meta), path("*.txt.gz"), emit: depth
+-    path "versions.yml"                    , emit: versions
++    path "versions.yml"              , emit: versions
+ 
+     when:
+     task.ext.when == null || task.ext.when
 @@ -26,6 +27,7 @@
      jgi_summarize_bam_contig_depths \\
          --outputDepth ${prefix}.txt \\

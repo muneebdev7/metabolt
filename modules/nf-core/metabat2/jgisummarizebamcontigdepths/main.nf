@@ -9,11 +9,11 @@ process METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS {
 
     input:
     tuple val(meta), path(bam), path(bai)
-    path assembly_contigs_fasta
+    tuple val(meta2), path (assembly_contigs_fasta)
 
     output:
     tuple val(meta), path("*.txt.gz"), emit: depth
-    path "versions.yml"                    , emit: versions
+    path "versions.yml"              , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
