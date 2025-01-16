@@ -18,18 +18,15 @@ workflow BINNING {
     */
 
     // Generate coverage depths for each contig
-    ch_summarizedepth_input = ch_contigs
-        .join(ch_bams, by: 0)
+    ch_bams_bais = ch_bams
         .join(ch_bais, by: 0)
-        .map { meta, _contigs, bam, bai ->
+        .map { meta, bam, bai ->
             [ meta, bam, bai ]
         }
 
     METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS(
-        ch_summarizedepth_input,
+        ch_bams_bais,
         ch_contigs
-            .map { _meta, contigs ->
-                contigs }
     )
     // Collect version information
     ch_versions = ch_versions.mix(METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS.out.versions.first())
