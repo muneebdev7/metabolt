@@ -83,7 +83,7 @@ Contigs are mapped onto raw reads using BWA-MEM, indexed with BWA index, and sor
 
 - `mapping/`
   - `bwa/index`
-     -vdsvs
+    -vdsvs
   - `[sample/group]_mapped.bam`: Binary alignment map (BAM) file containing the mapped reads
   - `[sample/group]_mapped.bam.bai`: BAM index file
   - `[sample/group]_sorted.bam`: Sorted BAM file

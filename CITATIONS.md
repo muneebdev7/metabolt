@@ -11,7 +11,8 @@
 ## Pipeline tools
 
 - [BWA](https://doi.org/10.1093/bioinformatics/btp324)
-  >Heng Li, Richard Durbin, Fast and accurate short read alignment with Burrows–Wheeler transform, Bioinformatics, Volume 25, Issue 14, July 2009, Pages 1754–1760, doi: 10.1093/bioinformatics/btp324
+
+  > Heng Li, Richard Durbin, Fast and accurate short read alignment with Burrows–Wheeler transform, Bioinformatics, Volume 25, Issue 14, July 2009, Pages 1754–1760, doi: 10.1093/bioinformatics/btp324
 
 - [FastP](https://doi.org/10.1093/bioinformatics/bty560)
 
@@ -42,6 +43,8 @@
 - [Full-size test data](https://doi.org/10.1038/s41467-023-43000-z)
 
   > Ma, B., Lu, C., Wang, Y. et al. A genomic catalogue of soil microbiomes boosts mining of biodiversity and genetic resources. Nat Commun 14, 7318 (2023). doi.org/10.1038/s41467-023-43000-z
+
+- [Test-profile data](https://github.com/nf-core/test-datasets/tree/mag/test_data)
 
 ## Software packaging/containerisation tools
 

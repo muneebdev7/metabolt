@@ -233,34 +233,36 @@
                     "description": "Specify a FASTA file to trim adapter sequences in the read files."
                 },
                 "discard_trimmed_pass": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "description": "read1/read2 output file name"
                 },
                 "save_trimmed_fail": {
                     "type": "boolean",
                     "fa_icon": "fas fa-save",
-                    "description": "specify the file to store reads that cannot pass the filters."
+                    "description": "specify the file to store reads that cannot pass the filters"
                 },
                 "save_merged": {
                     "type": "boolean",
-                    "fa_icon": "fas fa-save"
+                    "fa_icon": "fas fa-save",
+                    "description": "In the merging mode, specify the file name to store merged output"
                 },
                 "fastp_phred_quality": {
                     "type": "integer",
                     "default": 20,
                     "fa_icon": "fas fa-greater-than-equal",
-                    "description": "The PHRED quality value that a base is qualified. Default 20 means PHRED quality >=Q20 is qualified."
+                    "description": "The PHRED quality value that a base is qualified. Default 20 means PHRED quality >=Q20 is qualified"
                 },
                 "fastp_cut_mean_quality": {
                     "type": "integer",
                     "default": 20,
                     "fa_icon": "fas fa-greater-than-equal",
-                    "description": "The mean quality requirement option, ranging 1~36."
+                    "description": "The mean quality requirement option, ranging 1~36"
                 },
                 "reads_minlength": {
                     "type": "integer",
                     "default": 15,
                     "fa_icon": "fas fa-ruler",
-                    "description": "Reads shorter than length required (specified value) will be discarded."
+                    "description": "Reads shorter than length required (specified value) will be discarded"
                 }
             },
             "fa_icon": "fas fa-cut"
@@ -268,7 +270,7 @@
         "megahit_options": {
             "title": "MEGAHIT options",
             "type": "object",
-            "description": "MEGAHIT options for optimized and efficient assembly process.",
+            "description": "MEGAHIT options for optimized and efficient assembly process",
             "default": "",
             "properties": {
                 "megahit_min_contig_len": {
@@ -281,7 +283,7 @@
                     "type": "string",
                     "default": "31,59,87,115,143",
                     "fa_icon": "fas fa-clipboard-list",
-                    "description": "Optimized list of k-mers. All must be odd, in the range 15-255."
+                    "description": "Optimized list of k-mers. All must be odd, in the range 15-255"
                 }
             },
             "fa_icon": "fas fa-align-justify"
@@ -294,7 +296,13 @@
                 "metabat2_min_contig_len": {
                     "type": "integer",
                     "default": 1500,
-                    "description": "Minimum length of contigs to include in binning process. Contigs shorter than the specified length will be excluded from the analysis."
+                    "description": "Minimum length of contigs to include in binning process. Contigs shorter than the specified length will be excluded from the analysis"
+                },
+                "metabat2_seed": {
+                    "type": "integer",
+                    "default": 9999,
+                    "fa_icon": "fas fa-seedling",
+                    "description": "For exact reproducibility of results"
                 }
             },
             "fa_icon": "fas fa-trash",

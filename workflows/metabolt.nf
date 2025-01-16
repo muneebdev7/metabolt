@@ -19,8 +19,7 @@ include { MEGAHIT                              } from '../modules/nf-core/megahi
 include { BWA_INDEX                            } from '../modules/nf-core/bwa/index/main'
 include { BWA_MEM                              } from '../modules/nf-core/bwa/mem/main'
 include { SAMTOOLS_INDEX                       } from '../modules/nf-core/samtools/index/main'
-include { METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS } from '../modules/nf-core/metabat2/jgisummarizebamcontigdepths/main'
-include { METABAT2_METABAT2                    } from '../modules/nf-core/metabat2/metabat2/main'
+include { BINNING                              } from '../subworkflows/local/binning'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -50,6 +49,7 @@ workflow METABOLT {
         ch_samplesheet
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
+    // Collect version information
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
 
     //
@@ -63,6 +63,7 @@ workflow METABOLT {
         params.save_merged ?: false
     )
     ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]})
+    // Collect version information
     ch_versions = ch_versions.mix(FASTP.out.versions.first())
 
     /*
@@ -84,11 +85,12 @@ workflow METABOLT {
     MEGAHIT (
         ch_megahit_input
     )
+    // Collect version information
     ch_versions = ch_versions.mix(MEGAHIT.out.versions.first())
 
     // Prepare assembled contigs for downstream analysis
     ch_assemblies = MEGAHIT.out.contigs.map { meta, contigs ->
-        [meta + [assembler: 'megahit'], contigs]
+        [meta, contigs]
     }
 
     /*
@@ -123,54 +125,23 @@ workflow METABOLT {
 
     // Output channels for downstream use
     ch_sorted_bam = BWA_MEM.out.bam
-    ch_bam_index = SAMTOOLS_INDEX.out.bai.mix(SAMTOOLS_INDEX.out.csi)
+    ch_indexed_bam = SAMTOOLS_INDEX.out.bai
 
     /*
     ================================================================================
-                            Contigs Depth Calculation
+                Contigs Depth Calculation & Genome Binning
     ================================================================================
     */
-
-    // Generate coverage depths for each contig
-    ch_summarizedepth_input = ch_assemblies
-        .join(ch_sorted_bam)
-        .join(ch_bam_index)
-        .map { meta, contigs, bam, bai ->
-            [ meta, bam, bai ]
-        }
-
-    //
-    // MODULE: Run METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS
-    //
-    METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS(
-        ch_summarizedepth_input
-    )
-    // Collect version information
-    ch_versions = ch_versions.mix(METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS.out.versions)
-
-    ch_metabat_depths = METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS.out.depth
-
-    /*
-    ================================================================================
-                                    Genome Binning
-    ================================================================================
-    */
-
-    // Prepare input for METABAT2
-    ch_metabat_input = ch_assemblies
-        .join(ch_metabat_depths)
-        .map { meta, contigs, depths ->
-            [ meta, contigs, depths ]
-        }
 
     //
     // MODULE: Run METABAT2
     //
-    METABAT2_METABAT2 (
-        ch_metabat_input
+    BINNING (
+        ch_assemblies,
+        ch_sorted_bam,
+        ch_indexed_bam
     )
-    // Collect version information
-    ch_versions = ch_versions.mix(METABAT2_METABAT2.out.versions)
+    ch_versions = ch_versions.mix(BINNING.out.versions)
 
     //
     // Collate and save software versions
@@ -237,9 +208,6 @@ workflow METABOLT {
     )
 
     emit:
-    assemblies     = ch_assemblies               // channel:
-    aligned_sort   = ch_sorted_bam
-    aligned_index  = ch_bam_index
     multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
 
