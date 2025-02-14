@@ -4,10 +4,12 @@ Changes in component 'nf-core/metabat2/jgisummarizebamcontigdepths'
 Changes in 'metabat2/jgisummarizebamcontigdepths/main.nf':
 --- modules/nf-core/metabat2/jgisummarizebamcontigdepths/main.nf
 +++ modules/nf-core/metabat2/jgisummarizebamcontigdepths/main.nf
-@@ -9,10 +9,11 @@
+@@ -8,11 +8,12 @@
+         'biocontainers/metabat2:2.15--h986a166_1' }"
  
      input:
-     tuple val(meta), path(bam), path(bai)
+-    tuple val(meta), path(bam), path(bai)
++    tuple val(meta), path(bam)
 +    tuple val(meta2), path (assembly_contigs_fasta)
  
      output:
