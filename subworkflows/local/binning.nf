@@ -5,7 +5,6 @@ workflow BINNING {
     take:
     ch_contigs   // channel: [ val(meta), path(contigs) ]
     ch_bams      // channel: [ val(meta), path(bam) ]
-    ch_bais      // channel: [ val(meta), path(bai) ]
 
     main:
 
@@ -17,16 +16,19 @@ workflow BINNING {
     ================================================================================
     */
 
-    // Generate coverage depths for each contig
-    ch_bams_bais = ch_bams
-        .join(ch_bais, by: 0)
-        .map { meta, bam, bai ->
-            [ meta, bam, bai ]
+    // Join all input channels by sample ID
+    ch_jgi_input = ch_contigs
+        .join(ch_bams, by: 0)
+        .map { meta, contigs, bam ->
+            [ meta, contigs, bam ]
         }
 
+    // Dump the joined input channel
+    ch_jgi_input.dump(tag: 'joined_input')
+
     METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS(
-        ch_bams_bais,
-        ch_contigs
+        ch_jgi_input.map { meta, _contigs, bam -> [ meta, bam ] },
+        ch_jgi_input.map { meta, contigs, _bam -> [ meta, contigs ] }
     )
     // Collect version information
     ch_versions = ch_versions.mix(METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS.out.versions.first())
