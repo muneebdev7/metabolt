@@ -1,5 +1,26 @@
 Changes in component 'nf-core/metabat2/jgisummarizebamcontigdepths'
-'modules/nf-core/metabat2/jgisummarizebamcontigdepths/meta.yml' is unchanged
+Changes in 'metabat2/jgisummarizebamcontigdepths/meta.yml':
+--- modules/nf-core/metabat2/jgisummarizebamcontigdepths/meta.yml
++++ modules/nf-core/metabat2/jgisummarizebamcontigdepths/meta.yml
+@@ -26,10 +26,14 @@
+         type: file
+         description: Sorted BAM file of reads aligned on the assembled contigs
+         pattern: "*.bam"
+-    - bai:
++  - - meta2:
++        type: map
++        description: |
++          Groovy Map containing sample information
++          e.g. [ id:'test', single_end:false ]
++    - assembly_contigs_fasta:
+         type: file
+-        description: BAM index file
+-        pattern: "*.bam.bai"
++        description: Final assembled contigs in FASTA format
+ output:
+   - depth:
+       - meta:
+
 'modules/nf-core/metabat2/jgisummarizebamcontigdepths/environment.yml' is unchanged
 Changes in 'metabat2/jgisummarizebamcontigdepths/main.nf':
 --- modules/nf-core/metabat2/jgisummarizebamcontigdepths/main.nf
