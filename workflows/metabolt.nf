@@ -62,6 +62,12 @@ workflow METABOLT {
         params.save_trimmed_fail ?: false,
         params.save_merged ?: false
     )
+
+    // Prepare trimmed reads as input in bwa_mem module
+    ch_clean_reads = FASTP.out.reads.map { meta, reads ->
+        [meta, reads]
+    }
+    // Collect JSON files for MultiQC
     ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]})
     // Collect version information
     ch_versions = ch_versions.mix(FASTP.out.versions.first())
@@ -103,16 +109,26 @@ workflow METABOLT {
     // MODULE: Run BWA_INDEX on assembled contigs for indexing
     //
     BWA_INDEX(ch_assemblies)
+    ch_index_for_bwamem = BWA_INDEX.out.index.map { meta, index ->
+        [meta, index]
+    }
     // Collect version information
     ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
 
     //
     // MODULE: Run BWA_MEM for alignment of trimmed reads to indexed contigs
     //
+    ch_bwamem_input = ch_clean_reads
+        .join(ch_index_for_bwamem, by: 0)
+        .join(ch_assemblies, by: 0)
+        .map { meta, reads, index, contigs ->
+            [meta, reads, index, contigs]
+        }
+
     BWA_MEM(
-        FASTP.out.reads,
-        BWA_INDEX.out.index,
-        ch_assemblies,
+        ch_bwamem_input.map { meta, reads, _index, _contigs -> [meta, reads] },
+        ch_bwamem_input.map { meta, _reads, index, _contigs -> [meta, index] },
+        ch_bwamem_input.map { meta, _reads, _index, contigs -> [meta, contigs] },
         true
     )
     // Collect version information
@@ -125,7 +141,6 @@ workflow METABOLT {
 
     // Output channels for downstream use
     ch_sorted_bam = BWA_MEM.out.bam
-    ch_indexed_bam = SAMTOOLS_INDEX.out.bai
 
     /*
     ================================================================================
@@ -139,7 +154,6 @@ workflow METABOLT {
     BINNING (
         ch_assemblies,
         ch_sorted_bam,
-        ch_indexed_bam
     )
     ch_versions = ch_versions.mix(BINNING.out.versions)
 

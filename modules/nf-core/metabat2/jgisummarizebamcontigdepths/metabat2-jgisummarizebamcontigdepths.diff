@@ -1,13 +1,36 @@
 Changes in component 'nf-core/metabat2/jgisummarizebamcontigdepths'
-'modules/nf-core/metabat2/jgisummarizebamcontigdepths/meta.yml' is unchanged
+Changes in 'metabat2/jgisummarizebamcontigdepths/meta.yml':
+--- modules/nf-core/metabat2/jgisummarizebamcontigdepths/meta.yml
++++ modules/nf-core/metabat2/jgisummarizebamcontigdepths/meta.yml
+@@ -26,10 +26,14 @@
+         type: file
+         description: Sorted BAM file of reads aligned on the assembled contigs
+         pattern: "*.bam"
+-    - bai:
++  - - meta2:
++        type: map
++        description: |
++          Groovy Map containing sample information
++          e.g. [ id:'test', single_end:false ]
++    - assembly_contigs_fasta:
+         type: file
+-        description: BAM index file
+-        pattern: "*.bam.bai"
++        description: Final assembled contigs in FASTA format
+ output:
+   - depth:
+       - meta:
+
 'modules/nf-core/metabat2/jgisummarizebamcontigdepths/environment.yml' is unchanged
 Changes in 'metabat2/jgisummarizebamcontigdepths/main.nf':
 --- modules/nf-core/metabat2/jgisummarizebamcontigdepths/main.nf
 +++ modules/nf-core/metabat2/jgisummarizebamcontigdepths/main.nf
-@@ -9,10 +9,11 @@
+@@ -8,11 +8,12 @@
+         'biocontainers/metabat2:2.15--h986a166_1' }"
  
      input:
-     tuple val(meta), path(bam), path(bai)
+-    tuple val(meta), path(bam), path(bai)
++    tuple val(meta), path(bam)
 +    tuple val(meta2), path (assembly_contigs_fasta)
  
      output:

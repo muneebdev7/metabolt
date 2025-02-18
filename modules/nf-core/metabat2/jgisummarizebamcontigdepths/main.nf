@@ -8,7 +8,7 @@ process METABAT2_JGISUMMARIZEBAMCONTIGDEPTHS {
         'biocontainers/metabat2:2.15--h986a166_1' }"
 
     input:
-    tuple val(meta), path(bam), path(bai)
+    tuple val(meta), path(bam)
     tuple val(meta2), path (assembly_contigs_fasta)
 
     output:
