@@ -1,6 +1,6 @@
 {
     "name": "MDL/metabolt",
-    "homePage": "https://github.com/MDL/metabolt",
+    "homePage": "https://github.com/muneebdev7/metabolt",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {
