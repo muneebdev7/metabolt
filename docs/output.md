@@ -41,7 +41,7 @@ FastQC is run for visualising the general quality metrics of the sequencing runs
 
 ### fastp
 
-[fastp](https://github.com/OpenGene/fastp) is a all-in-one fastq preprocessor for read/adapter trimming and quality control. It is used in this pipeline for trimming adapter sequences and discard low-quality reads. Its output is in the results folder and part of the MultiQC report.
+[fastp](https://github.com/OpenGene/fastp) is an all-in-one fastq preprocessor for read/adapter trimming and quality control. It is used in this pipeline for trimming adapter sequences and discarding low-quality reads. Its output is in the results folder and part of the MultiQC report.
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -49,78 +49,109 @@ FastQC is run for visualising the general quality metrics of the sequencing runs
 - `fastp/[sample]/`
   - `[sample/group]_trimmed_[1/2].fastp.fastq.gz`: Compressed preprocessed read file
   - `[sample/group]_trimmed.fastp.html`: Interactive report
-  - `[sample/group]_trimmed.fastp.json`: Report in json format
+  - `[sample/group]_trimmed.fastp.json`: Report in JSON format
 
 </details>
 
 ## Assembly
 
-Trimmed (short) reads are assembled with megahit.
+Trimmed (short) reads are assembled with MEGAHIT.
 
 ### MEGAHIT
 
-[MEGAHIT](https://github.com/voutcn/megahit) is a single node assembler for large and complex metagenomics short reads.
+[MEGAHIT](https://github.com/voutcn/megahit) is a fast and memory-efficient assembler designed for assembling large and complex metagenomics datasets. It uses succinct de Bruijn graphs to assemble contigs from short reads.
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `Assembly/`
-  - `[sample/group]_assembled.contigs.fa.gz`: Compressed metagenome assembly in fasta format
+  - `[sample/group]_assembled.contigs.fa.gz`: Compressed metagenome assembly in FASTA format
   - `[sample/group]_assembled.log`: Log file
-  - `intermediate_contigs`: Compressed intermediate k-mers that have been generated during the assembly process.
+  - `intermediate_contigs`: Compressed intermediate k-mers generated during the assembly process.
 
 </details>
 
 ## Mapping
 
-Contigs are mapped onto raw reads using BWA-MEM, indexed with BWA index, and sorted with samtools sort.
+### BWA Index
 
-[BWA-MEM](http://bio-bwa.sourceforge.net/) is a software package for mapping low-divergent sequences against a large reference genome.
-[SAMTOOLS-SORT]
+[BWA Index](http://bio-bwa.sourceforge.net/) indexes the reference genome to prepare it for alignment. This step is essential for efficient read mapping.
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `mapping/`
-  - `bwa/index`
-    -vdsvs
-  - `[sample/group]_mapped.bam`: Binary alignment map (BAM) file containing the mapped reads
-  - `[sample/group]_mapped.bam.bai`: BAM index file
-  - `[sample/group]_sorted.bam`: Sorted BAM file
-  - `[sample/group]_mapping.log`: Log file containing mapping statistics
+- `bwa_index/[sample]/`
+  - `[sample]_indexed`: Indexed reference genome files
+
+</details>
+
+### BWA MEM
+
+[BWA MEM](http://bio-bwa.sourceforge.net/) is a widely used tool for aligning sequencing reads to a reference genome. It is optimized for high-quality reads and supports paired-end alignment.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `bwa_align_sorted/[sample]/`
+  - `[sample].bam`: Binary alignment map (BAM) file containing the mapped reads
+
+</details>
+
+### SAMTOOLS Index
+
+[SAMTOOLS Index](http://www.htslib.org/) creates an index for BAM files, enabling efficient random access to alignments.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `samtools/indexed/[sample]/`
+  - `[sample].bai`: BAM index file
 
 </details>
 
 ## Binning
 
-Binning is performed using MetaBAT2, which clusters contigs into bins representing individual genomes.
+### MetaBAT2 JGI Summarize Bam Contig Depths
 
-[MetaBAT2](https://bitbucket.org/berkeleylab/metabat/src/master/) is a robust metagenome binning software.
+[MetaBAT2 JGI Summarize Bam Contig Depths](https://bitbucket.org/berkeleylab/metabat/src/master/) calculates the depth of coverage for each contig in a BAM file. This information is used for binning contigs into genome bins.
 
 <details markdown="1">
 <summary>Output files</summary>
 
-- `binning/`
-  - `[sample/group]_bins/`: Directory containing binned contigs
-  - `[sample/group]_binning.log`: Log file containing binning statistics
+- `metabat2/depths/`
+  - `[sample]_depth.txt.gz`: Compressed depth information
+
+</details>
+
+### MetaBAT2
+
+[MetaBAT2](https://bitbucket.org/berkeleylab/metabat/src/master/) is a tool for binning contigs into genome bins based on sequence composition and coverage depth. It is widely used for metagenomic binning.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+- `metabat2/bins/[sample]/`
+  - `tooShort/*.tooShort.fa.gz`: Contigs too short for binning
+  - `lowDepth/*.lowDepth.fa.gz`: Contigs with low depth
+  - `unbinned/*.unbinned.fa.gz`: Unbinned contigs
+  - `membership/*.tsv.gz`: Membership information
+  - `bins/*.fa.gz`: Binned contigs
 
 </details>
 
 ## MultiQC
 
+[MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report, and further statistics are available in the report data directory.
+
 <details markdown="1">
 <summary>Output files</summary>
 
 - `multiqc/`
-  - `multiqc_report.html`: a standalone HTML file that can be viewed in your web browser.
-  - `multiqc_data/`: directory containing parsed statistics from the different tools used in the pipeline.
-  - `multiqc_plots/`: directory containing static images from the report in various formats.
+  - `multiqc_report.html`: A standalone HTML file that can be viewed in your web browser.
+  - `multiqc_data/`: Directory containing parsed statistics from the different tools used in the pipeline.
+  - `multiqc_plots/`: Directory containing static images from the report in various formats.
 
 </details>
-
-[MultiQC](http://multiqc.info) is a visualization tool that generates a single HTML report summarising all samples in your project. Most of the pipeline QC results are visualised in the report and further statistics are available in the report data directory.
-
-Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC. The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see <http://multiqc.info>.
 
 ## Pipeline information
 
