@@ -6,107 +6,30 @@ This document describes the output produced by the pipeline. Most of the plots a
 
 The directories listed below will be created in the results directory after the pipeline has finished. All paths are relative to the top-level results directory.
 
+<!-- TODO nf-core: Write this documentation describing your workflow's output -->
+
 ## Pipeline overview
 
 The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes data using the following steps:
 
-- [Quality control](#quality-control) of input reads - trimming and contaminant removal
-  - [FastQC](#fastqc) - Raw read QC
-  - [fastp](#fastp) - Trimming raw reads
-- [Assembly](#assembly) - Assembling trimmed reads into longer contigs
-- [Mapping](#mapping) - Mapping preprocessed reads onto contigs
-- [Binning](#binning) - Clustering contigs into bins representing individual genomes
+- [FastQC](#fastqc) - Raw read QC
 - [MultiQC](#multiqc) - Aggregate report describing results and QC from the whole pipeline
 - [Pipeline information](#pipeline-information) - Report metrics generated during the workflow execution
 
----
-
-## Quality control
-
-These steps trim away the adapter sequences present in input reads, trims away bad quality bases and, reads that are too short.
-FastQC is run for visualising the general quality metrics of the sequencing runs before and after trimming.
-
 ### FastQC
-
-[FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) gives general quality metrics about your sequenced reads. It provides information about the quality score distribution across your reads, per base sequence content (%A/T/G/C), adapter contamination and overrepresented sequences. For further reading and documentation see the [FastQC help pages](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/).
 
 <details markdown="1">
 <summary>Output files</summary>
 
 - `fastqc/`
-  - `[sample]_[1/2]_fastqc.html`: FastQC report, containing quality metrics for your untrimmed raw fastq files
-  - `[sample].trimmed_[1/2]_fastqc.html`: FastQC report, containing quality metrics for trimmed and, if specified, filtered read files
+  - `*_fastqc.html`: FastQC report containing quality metrics.
+  - `*_fastqc.zip`: Zip archive containing the FastQC report, tab-delimited data file and plot images.
 
 </details>
 
-### fastp
+[FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) gives general quality metrics about your sequenced reads. It provides information about the quality score distribution across your reads, per base sequence content (%A/T/G/C), adapter contamination and overrepresented sequences. For further reading and documentation see the [FastQC help pages](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/Help/).
 
-[fastp](https://github.com/OpenGene/fastp) is a all-in-one fastq preprocessor for read/adapter trimming and quality control. It is used in this pipeline for trimming adapter sequences and discard low-quality reads. Its output is in the results folder and part of the MultiQC report.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `fastp/[sample]/`
-  - `[sample/group]_trimmed_[1/2].fastp.fastq.gz`: Compressed preprocessed read file
-  - `[sample/group]_trimmed.fastp.html`: Interactive report
-  - `[sample/group]_trimmed.fastp.json`: Report in json format
-
-</details>
-
-## Assembly
-
-Trimmed (short) reads are assembled with megahit.
-
-### MEGAHIT
-
-[MEGAHIT](https://github.com/voutcn/megahit) is a single node assembler for large and complex metagenomics short reads.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `Assembly/`
-  - `[sample/group]_assembled.contigs.fa.gz`: Compressed metagenome assembly in fasta format
-  - `[sample/group]_assembled.log`: Log file
-  - `intermediate_contigs`: Compressed intermediate k-mers that have been generated during the assembly process.
-
-</details>
-
-## Mapping
-
-Contigs are mapped onto raw reads using BWA-MEM, indexed with BWA index, and sorted with samtools sort.
-
-[BWA-MEM](http://bio-bwa.sourceforge.net/) is a software package for mapping low-divergent sequences against a large reference genome.
-[SAMTOOLS-SORT]
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `mapping/`
-  - `bwa/index`
-     -vdsvs
-  - `[sample/group]_mapped.bam`: Binary alignment map (BAM) file containing the mapped reads
-  - `[sample/group]_mapped.bam.bai`: BAM index file
-  - `[sample/group]_sorted.bam`: Sorted BAM file
-  - `[sample/group]_mapping.log`: Log file containing mapping statistics
-
-</details>
-
-## Binning
-
-Binning is performed using MetaBAT2, which clusters contigs into bins representing individual genomes.
-
-[MetaBAT2](https://bitbucket.org/berkeleylab/metabat/src/master/) is a robust metagenome binning software.
-
-<details markdown="1">
-<summary>Output files</summary>
-
-- `binning/`
-  - `[sample/group]_bins/`: Directory containing binned contigs
-  - `[sample/group]_binning.log`: Log file containing binning statistics
-
-</details>
-
-## MultiQC
+### MultiQC
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -122,7 +45,7 @@ Binning is performed using MetaBAT2, which clusters contigs into bins representi
 
 Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQC. The pipeline has special steps which also allow the software versions to be reported in the MultiQC output for future traceability. For more information about how to use MultiQC reports, see <http://multiqc.info>.
 
-## Pipeline information
+### Pipeline information
 
 <details markdown="1">
 <summary>Output files</summary>
@@ -130,6 +53,7 @@ Results generated by MultiQC collate pipeline QC from supported tools e.g. FastQ
 - `pipeline_info/`
   - Reports generated by Nextflow: `execution_report.html`, `execution_timeline.html`, `execution_trace.txt` and `pipeline_dag.dot`/`pipeline_dag.svg`.
   - Reports generated by the pipeline: `pipeline_report.html`, `pipeline_report.txt` and `software_versions.yml`. The `pipeline_report*` files will only be present if the `--email` / `--email_on_fail` parameter's are used when running the pipeline.
+  - Reformatted samplesheet files used as input to the pipeline: `samplesheet.valid.csv`.
   - Parameters used by the pipeline run: `params.json`.
 
 </details>
