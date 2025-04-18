@@ -12,3 +12,11 @@ report_section_order:
 export_plots: true
 
 disable_version_detection: true
+
+## Module order
+top_modules:
+  - "fastqc":
+      name: "FastQC: raw reads"
+      path_filters_exclude:
+        - "*trimmed*"
+  - "fastp"

@@ -17,10 +17,9 @@
 
 ## Introduction
 
-**MDL/metabolt** is a bioinformatics pipeline that ...
+**MDL/metabolt** is a bioinformatics pipeline for efficient de novo metagenome assembly and binning.
 
-<!--Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
+![MDL/metabolt](docs/images/metabolt_workflow_light.png)
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 
@@ -96,7 +95,9 @@ MDL/metabolt was written by [Muhammad Muneeb Nasir](https://github.com/muneebdev
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-[Dr. Masood Ur Rehman Kayani](https://sines.nust.edu.pk/faculty/masood-ur-rehman-kayani/)
+- [Dr. Masood Ur Rehman Kayani](https://sines.nust.edu.pk/faculty/masood-ur-rehman-kayani/)
+- [Hajra Qayyum](https://www.researchgate.net/profile/Hajra-Qayyum)
+- [Haseeb Manzoor](https://www.linkedin.com/in/haseebmanzoor/)
 
 ## Contributions and Support
 
@@ -107,6 +108,14 @@ For further information or help, don't hesitate to get in touch on [`email`](mun
 ## Citations
 
 <!-- If you use [muneebdev7/metabolt](https://www.github.com/muneebdev7/metabolt) for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+
+The strategy to use a reduced k-mer set for efficient assembly, employed in this pipeline, is based on the following preprint:
+
+> **Efficient de novo metagenome assembly using reduced k-mer sets.**
+>
+> Hajra Qayyum, Masood Ur Rehman Kayani.
+>
+> _bioRxiv._ 2024 Jun 8. doi: [10.1101/2024.06.08.598064v2](https://www.biorxiv.org/content/10.1101/2024.06.08.598064v2).
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
