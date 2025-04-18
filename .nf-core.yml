@@ -15,9 +15,9 @@ lint:
     - .github/workflows/awsfulltest.yml
   files_unchanged:
     - CODE_OF_CONDUCT.md
-    - assets/nf-core-metabolt_logo_light.png
-    - docs/images/nf-core-metabolt_logo_light.png
-    - docs/images/nf-core-metabolt_logo_dark.png
+    - assets/email_template.html
+    - assets/email_template.txt
+    - docs/images/metabolt_logo_transparent.png
     - .github/ISSUE_TEMPLATE/bug_report.yml
     - .github/ISSUE_TEMPLATE/bug_report.yml
     - .github/ISSUE_TEMPLATE/feature_request.yml
