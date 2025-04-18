@@ -103,7 +103,7 @@ We thank the following people for their extensive assistance in the development 
 
 If you would like to contribute to this pipeline, please see the [`contributing guidelines`](.github/CONTRIBUTING.md).
 
-For further information or help, don't hesitate to get in touch on [`email`](muneebgojra@gmail.com).
+For further information or help, don't hesitate to get in touch on [`email`](mailto:muneebgojra@gmail.com).
 
 ## Citations
 

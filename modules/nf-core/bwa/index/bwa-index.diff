@@ -1,0 +1,20 @@
+Changes in component 'nf-core/bwa/index'
+Changes in 'bwa/index/main.nf':
+--- modules/nf-core/bwa/index/main.nf
++++ modules/nf-core/bwa/index/main.nf
+@@ -1,8 +1,6 @@
+ process BWA_INDEX {
+     tag "$fasta"
+-    // NOTE requires 5.37N memory where N is the size of the database
+-    // source: https://bio-bwa.sourceforge.net/bwa.shtml#8
+-    memory { 6.B * fasta.size() }
++    label 'process_single'
+ 
+     conda "${moduleDir}/environment.yml"
+     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+
+'modules/nf-core/bwa/index/environment.yml' is unchanged
+'modules/nf-core/bwa/index/meta.yml' is unchanged
+'modules/nf-core/bwa/index/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/bwa/index/tests/main.nf.test' is unchanged
+************************************************************
