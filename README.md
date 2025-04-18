@@ -1,12 +1,5 @@
 # MDL/metabolt
 
-<h1>
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/images/metabolt_logo.jpg">
-    <img alt="nf-core/rnaseq" src="docs/images/metabolt_logo.png">
-  </picture>
-</h1>
-
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A524.04.2-23aa62.svg)](https://www.nextflow.io/)
 [![GitHub Actions CI Status](https://github.com/muneebdev7/metabolt/actions/workflows/ci.yml/badge.svg)](https://github.com/muneebdev7/metabolt/actions/workflows/ci.yml)
 [![GitHub Actions Linting Status](https://github.com/muneebdev7/metabolt/actions/workflows/linting.yml/badge.svg)](https://github.com/muneebdev7/metabolt/actions/workflows/linting.yml)
@@ -26,7 +19,7 @@
 
 **MDL/metabolt** is a bioinformatics pipeline for efficient de novo metagenome assembly and binning.
 
-![nf-core/rnaseq metro map](docs/images/metabolt_workflow.png)
+![MDL/metabolt](docs/images/metabolt_workflow_light.png)
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 
