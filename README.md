@@ -1,4 +1,4 @@
-# MDL/metabolt
+# MDL/MetaBolt
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A524.04.2-23aa62.svg)](https://www.nextflow.io/)
 [![GitHub Actions CI Status](https://github.com/muneebdev7/metabolt/actions/workflows/ci.yml/badge.svg)](https://github.com/muneebdev7/metabolt/actions/workflows/ci.yml)
@@ -13,13 +13,13 @@
 ![Static Badge](https://img.shields.io/badge/Platform-Linux-black?logo=linux&logoColor=black&labelColor=grey&color=orange)
 ![GitHub License](https://img.shields.io/github/license/muneebdev7/metabolt?color=teal)
 
-[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![Cite with Zenodo](https://zenodo.org/badge/DOI/10.5281/zenodo.15243430.svg)](https://doi.org/10.5281/zenodo.15243430)
 
 ## Introduction
 
-**MDL/metabolt** is a bioinformatics pipeline for efficient de novo metagenome assembly and binning.
+**MDL/MetaBolt** is a bioinformatics pipeline for efficient de novo metagenome assembly and binning.
 
-![MDL/metabolt](docs/images/metabolt_workflow_light.png)
+![MDL/MetaBolt](docs/images/metabolt_workflow_light.png)
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 
